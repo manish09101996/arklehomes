@@ -51,8 +51,8 @@ class DatabaseSeeder extends Seeder
             // Branding & General
             ['key' => 'site_name', 'value' => 'Arkle Homes', 'group' => 'branding', 'label' => 'Company Name'],
             ['key' => 'site_tagline', 'value' => 'Designed for Living. Built for Life.', 'group' => 'branding', 'label' => 'Tagline'],
-            ['key' => 'site_logo', 'value' => 'images/logo/arkle-homes-logo.svg', 'group' => 'branding', 'type' => 'image', 'label' => 'Header Logo'],
-            ['key' => 'site_logo_horizontal', 'value' => 'images/logo/arkle-homes-logo-horizontal.svg', 'group' => 'branding', 'type' => 'image', 'label' => 'Footer Logo'],
+            ['key' => 'site_logo', 'value' => 'images/logo/arkle-homes-logo.png', 'group' => 'branding', 'type' => 'image', 'label' => 'Header Logo'],
+            ['key' => 'site_logo_horizontal', 'value' => 'images/logo/arkle-homes-logo-horizontal.png', 'group' => 'branding', 'type' => 'image', 'label' => 'Footer Logo'],
             ['key' => 'site_email', 'value' => 'sean@arklehomes.com.au', 'group' => 'contact', 'label' => 'Contact Email'],
             ['key' => 'site_phone', 'value' => '0430 331 187', 'group' => 'contact', 'label' => 'Phone Number'],
             ['key' => 'site_address', 'value' => '240 Emmersons Road Lovely Banks VIC 3213', 'group' => 'contact', 'label' => 'Office Address'],

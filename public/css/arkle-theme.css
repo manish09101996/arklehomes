@@ -293,12 +293,14 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .logo-badge img {
-    height: 70px;
+    height: 64px;
     width: auto;
+    border-radius: 4px;
+    display: block;
 }
 
 .header-main.sticky .logo-badge img {
-    height: 56px;
+    height: 52px;
 }
 
 .nav-menu {
@@ -1002,9 +1004,11 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .footer-logo img {
-    height: 60px;
+    height: 64px;
     width: auto;
+    border-radius: 4px;
     margin-bottom: 20px;
+    display: block;
 }
 
 .footer-about {

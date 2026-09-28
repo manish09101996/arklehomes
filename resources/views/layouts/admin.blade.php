@@ -7,7 +7,7 @@
 
     <title>@yield('title', 'Admin Dashboard') | Arkle Homes CMS</title>
 
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo/arkle-homes-logo.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}">
     <link rel="stylesheet" href="{{ asset('css/arkle-admin.css') }}">
     @stack('styles')
 </head>
@@ -16,7 +16,7 @@
     <!-- Admin Sidebar -->
     <aside class="admin-sidebar">
         <div class="sidebar-header">
-            <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.svg')) }}" alt="Arkle Homes">
+            <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}" alt="Arkle Homes">
             <div class="sidebar-brand-text">
                 ARKLE HOMES
                 <span>Content Management</span>

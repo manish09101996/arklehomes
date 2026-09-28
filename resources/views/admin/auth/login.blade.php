@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Login | Arkle Homes</title>
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo/arkle-homes-logo.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}">
     <link rel="stylesheet" href="{{ asset('css/arkle-admin.css') }}">
     <style>
         body.login-screen {
@@ -60,7 +60,7 @@
 
     <div class="login-card">
         <div class="login-logo">
-            <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.svg')) }}" alt="Arkle Homes">
+            <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}" alt="Arkle Homes">
             <h1 class="login-title">Control Panel Sign In</h1>
             <p class="login-subtitle">Arkle Homes Administration & Content Management</p>
         </div>

@@ -19,7 +19,7 @@
                         {{ setting('hero_description', 'We create modern, functional and timeless homes that reflect your lifestyle and stand the test of time.') }}
                     </p>
                     <div class="hero-actions">
-                        <a href="{{ setting('hero_btn_1_url', '/projects') }}" class="btn btn-gold">
+                        <a href="{{ safe_url(setting('hero_btn_1_url', '/projects')) }}" class="btn btn-gold">
                             {{ setting('hero_btn_1_text', 'Our Projects') }} &rarr;
                         </a>
                         <button type="button" class="btn btn-video" data-video-modal data-video-url="{{ setting('hero_video_url', 'https://www.youtube.com/embed/dQw4w9WgXcQ') }}">
@@ -76,7 +76,7 @@
                     <p class="about-paragraph">
                         {{ setting('about_description', 'At Arkle Homes, we combine innovative design, quality materials and expert craftsmanship to deliver homes that inspire. From concept to completion, we focus on every detail to create spaces that are beautiful, functional and built to last.') }}
                     </p>
-                    <a href="{{ setting('about_btn_url', '/about') }}" class="btn btn-outline-dark">
+                    <a href="{{ safe_url(setting('about_btn_url', '/about')) }}" class="btn btn-outline-dark">
                         {{ setting('about_btn_text', 'Learn More') }} &rarr;
                     </a>
                 </div>

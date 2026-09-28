@@ -38,4 +38,10 @@ class MenuItem extends Model
             ->where('is_active', true)
             ->orderBy('order');
     }
+
+    public function getFormattedUrlAttribute(): string
+    {
+        return safe_url($this->url);
+    }
 }
+

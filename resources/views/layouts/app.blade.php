@@ -20,7 +20,7 @@
     <meta property="og:image" content="{{ !empty($seo->og_image) ? asset($seo->og_image) : asset(setting('hero_bg_image', 'images/hero/hero-facade.jpg')) }}">
 
     <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="{{ asset('images/logo/arkle-homes-logo.svg') }}">
+    <link rel="icon" type="image/png" href="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}">
 
     <!-- Stylesheets -->
     <link rel="stylesheet" href="{{ asset('css/arkle-theme.css') }}">
@@ -35,7 +35,7 @@
             <div class="nav-container">
                 <!-- Logo -->
                 <a href="{{ route('home') }}" class="logo-badge" title="Arkle Homes">
-                    <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.svg')) }}" alt="Arkle Homes Logo">
+                    <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}" alt="Arkle Homes Logo">
                 </a>
 
                 <!-- Desktop Nav Menu -->
@@ -44,7 +44,7 @@
                         @if(isset($headerNavItems) && $headerNavItems->isNotEmpty())
                             @foreach($headerNavItems as $item)
                                 <li>
-                                    <a href="{{ $item->url }}" 
+                                    <a href="{{ $item->formatted_url }}" 
                                        target="{{ $item->target }}" 
                                        class="nav-link {{ Request::is(trim($item->url, '/')) || (Request::is('/') && $item->url === '/') ? 'active' : '' }}">
                                         {{ $item->label }}
@@ -64,7 +64,7 @@
 
                 <!-- Header CTA Button & Hamburger -->
                 <div class="nav-cta">
-                    <a href="{{ setting('header_cta_url', '/contact') }}" class="btn btn-gold btn-sm">
+                    <a href="{{ safe_url(setting('header_cta_url', '/contact')) }}" class="btn btn-gold btn-sm">
                         {{ setting('header_cta_text', 'Get in Touch') }} &rarr;
                     </a>
 
@@ -85,7 +85,7 @@
     <div class="mobile-nav-drawer">
         <div>
             <div style="display: flex; justify-content: space-between; align-items: center;">
-                <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.svg')) }}" alt="Arkle Homes" style="height: 50px;">
+                <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}" alt="Arkle Homes" style="height: 50px;">
                 <button class="drawer-close" style="background: none; border: none; color: #fff; font-size: 28px; cursor: pointer;">&times;</button>
             </div>
             <ul class="mobile-links">
@@ -99,7 +99,7 @@
             </ul>
         </div>
         <div>
-            <a href="{{ setting('header_cta_url', '/contact') }}" class="btn btn-gold" style="width: 100%;">
+            <a href="{{ safe_url(setting('header_cta_url', '/contact')) }}" class="btn btn-gold" style="width: 100%;">
                 {{ setting('header_cta_text', 'Get in Touch') }} &rarr;
             </a>
             <div style="margin-top: 18px; color: var(--color-text-muted); font-size: 0.85rem; text-align: center;">
@@ -123,7 +123,7 @@
                         <p>{{ setting('cta_description', 'Partner with Arkle Homes to build a timeless residence tailored specifically to your family and lifestyle.') }}</p>
                     </div>
                     <div>
-                        <a href="{{ setting('cta_btn_url', '/contact') }}" class="btn btn-gold" style="padding: 16px 36px; font-size: 1rem;">
+                        <a href="{{ safe_url(setting('cta_btn_url', '/contact')) }}" class="btn btn-gold" style="padding: 16px 36px; font-size: 1rem;">
                             {{ setting('cta_btn_text', 'Start Your Project') }} &rarr;
                         </a>
                     </div>
@@ -140,7 +140,7 @@
                 <div>
                     <div class="footer-logo">
                         <a href="{{ route('home') }}">
-                            <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.svg')) }}" alt="Arkle Homes">
+                            <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}" alt="Arkle Homes">
                         </a>
                     </div>
                     <p class="footer-about">
@@ -155,9 +155,10 @@
                         @if(isset($footerQuickLinks) && $footerQuickLinks->isNotEmpty())
                             @foreach($footerQuickLinks as $item)
                                 <li>
-                                    <a href="{{ $item->url }}" target="{{ $item->target }}">{{ $item->label }}</a>
+                                    <a href="{{ $item->formatted_url }}" target="{{ $item->target }}">{{ $item->label }}</a>
                                 </li>
                             @endforeach
+
                         @else
                             <li><a href="{{ route('home') }}">Home</a></li>
                             <li><a href="{{ route('about') }}">About Us</a></li>

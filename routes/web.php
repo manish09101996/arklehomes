@@ -43,7 +43,9 @@ Route::post('/contact', [ContactController::class, 'submit'])->name('contact.sub
 Route::get('/faq', [PageController::class, 'faq'])->name('faq');
 
 Route::get('/privacy-policy', [PageController::class, 'privacy'])->name('privacy');
+Route::get('/privacy', [PageController::class, 'privacy']);
 Route::get('/terms-and-conditions', [PageController::class, 'terms'])->name('terms');
+Route::get('/terms', [PageController::class, 'terms']);
 
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');

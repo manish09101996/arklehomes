@@ -25,7 +25,7 @@
                     <div class="admin-form-group">
                         <label class="admin-form-label">Current Header Logo</label>
                         <div style="background: #0D1C24; padding: 14px; border-radius: 6px; display: inline-block; margin-bottom: 10px;">
-                            <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.svg')) }}" alt="" style="height: 50px;">
+                            <img src="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}" alt="" style="height: 50px;">
                         </div>
                         <input type="file" name="site_logo" class="admin-form-control" accept="image/*">
                     </div>
