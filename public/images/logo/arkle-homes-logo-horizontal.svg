@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 80" width="320" height="80">
+  <!-- Yellow badge on the left -->
+  <rect x="5" y="8" width="64" height="64" rx="10" fill="#EEA727"/>
+  <g transform="translate(37, 36)" fill="#0C1B23">
+    <path d="M-16,4 L0,-12 L16,4 L12,4 L0,-8 L-12,4 Z" />
+    <path d="M-11,4 L-11,12 L11,12 L11,4 L8,4 L8,9 L-8,9 L-8,4 Z" />
+    <path d="M0,10 L0,-2 M0,0 C-2,-3 -5,-1 -5,-4 C-5,-6 -2,-5 0,-3 C2,-5 5,-6 5,-4 C4,-1 2,-3 0,0" stroke="#0C1B23" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+  </g>
+  <!-- Text on the right -->
+  <text x="85" y="42" font-family="'Playfair Display', serif" font-weight="900" font-size="24" fill="#0C1B23" letter-spacing="1.5">ARKLE HOMES</text>
+  <text x="86" y="59" font-family="'Plus Jakarta Sans', sans-serif" font-weight="700" font-size="9" fill="#EEA727" letter-spacing="3.5">BUILDING SERVICES</text>
+</svg>

@@ -1,0 +1,6 @@
+*
+!.gitignore
+!projects/
+!projects/**
+!branding/
+!branding/**
