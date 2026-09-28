@@ -48,18 +48,34 @@ try {
 
     foreach (['localhost', '127.0.0.1'] as $host) {
         try {
-            $pdo = new PDO("mysql:host={$host};dbname=u839951407_ArkleHomes;port=3306;charset=utf8mb4", 'u839951407_ArkleHomes', '##Password80', [
+            $pass = config('database.connections.mysql.password');
+            $pdo = new PDO("mysql:host={$host};dbname=u839951407_ArkleHomes;port=3306;charset=utf8mb4", 'u839951407_ArkleHomes', $pass, [
                 PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                 PDO::ATTR_TIMEOUT => 3
             ]);
-            echo "<p style='color:green; font-weight:bold;'>✓ Direct PDO connection to Host '{$host}' with password SUCCEEDED!</p>";
+            echo "<p style='color:green; font-weight:bold;'>✓ Direct PDO connection to Host '{$host}' SUCCEEDED!</p>";
             
             $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
-            echo "Tables found: " . count($tables) . " (" . implode(', ', array_slice($tables, 0, 10)) . ")<br>";
+            echo "Tables found: " . count($tables) . "<br>";
         } catch (Throwable $pe) {
             echo "<p style='color:red;'>Direct PDO to Host '{$host}' failed: " . htmlspecialchars($pe->getMessage()) . "</p>";
         }
     }
+
+    echo "<hr><h3>Checking Public Storage Symlink</h3>";
+    $pubStorage = $baseDir . '/public/storage';
+    echo "Public storage path: " . $pubStorage . "<br>";
+    echo "Public storage exists: " . (file_exists($pubStorage) ? "YES" : "NO") . "<br>";
+    echo "Is symlink: " . (is_link($pubStorage) ? "YES" : "NO") . "<br>";
+    if (!file_exists($pubStorage) && !is_link($pubStorage)) {
+        try {
+            $artisanResult = \Illuminate\Support\Facades\Artisan::call('storage:link');
+            echo "<p style='color:green;'>Artisan storage:link output: " . \Illuminate\Support\Facades\Artisan::output() . "</p>";
+        } catch (\Throwable $se) {
+            echo "<p style='color:red;'>Artisan storage:link error: " . htmlspecialchars($se->getMessage()) . "</p>";
+        }
+    }
+
 } catch (Throwable $e) {
 
     echo "<p style='color:red; font-weight:bold;'>Error Caught: " . htmlspecialchars($e->getMessage()) . "</p>";
