@@ -40,17 +40,23 @@ try {
     echo "DB Username: " . config('database.connections.mysql.username') . "<br>";
     echo "DB Password set: " . (!empty(config('database.connections.mysql.password')) ? "YES (Length: " . strlen(config('database.connections.mysql.password')) . ")" : "NO / EMPTY") . "<br>";
 
-    Illuminate\Support\Facades\DB::connection()->getPdo();
-    echo "<p style='color:green; font-weight:bold;'>✓ Database connection SUCCESSFUL!</p>";
-
-    $tables = Illuminate\Support\Facades\DB::select('SHOW TABLES');
-    echo "Total tables found: " . count($tables) . "<br>";
-    if (count($tables) === 0) {
-        echo "<b style='color:orange;'>Warning: Database has 0 tables. Please import database/arkle_homes.sql in phpMyAdmin.</b><br>";
-    } else {
-        echo "<span style='color:green;'>✓ Tables exist: Ready to serve!</span><br>";
+    echo "<hr><h3>Testing Direct PDO Connection with ##Password80</h3>";
+    foreach (['localhost', '127.0.0.1'] as $host) {
+        try {
+            $pdo = new PDO("mysql:host={$host};dbname=u839951407_ArkleHomes;port=3306;charset=utf8mb4", 'u839951407_ArkleHomes', '##Password80', [
+                PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+                PDO::ATTR_TIMEOUT => 3
+            ]);
+            echo "<p style='color:green; font-weight:bold;'>✓ Direct PDO connection to Host '{$host}' with password SUCCEEDED!</p>";
+            
+            $tables = $pdo->query('SHOW TABLES')->fetchAll(PDO::FETCH_COLUMN);
+            echo "Tables found: " . count($tables) . " (" . implode(', ', array_slice($tables, 0, 10)) . ")<br>";
+        } catch (Throwable $pe) {
+            echo "<p style='color:red;'>Direct PDO to Host '{$host}' failed: " . htmlspecialchars($pe->getMessage()) . "</p>";
+        }
     }
 } catch (Throwable $e) {
+
     echo "<p style='color:red; font-weight:bold;'>Error Caught: " . htmlspecialchars($e->getMessage()) . "</p>";
     echo "<pre style='background:#f1f5f9; padding:12px; border-radius:6px;'>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
 }
