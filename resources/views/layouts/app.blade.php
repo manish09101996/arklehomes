@@ -23,7 +23,7 @@
     <link rel="icon" type="image/png" href="{{ asset(setting('site_logo', 'images/logo/arkle-homes-logo.png')) }}">
 
     <!-- Stylesheets -->
-    <link rel="stylesheet" href="{{ asset('css/arkle-theme.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/arkle-theme.css') }}?v={{ file_exists(public_path('css/arkle-theme.css')) ? filemtime(public_path('css/arkle-theme.css')) : '2.0' }}">
 
     @stack('styles')
 </head>
@@ -256,7 +256,7 @@
     </div>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/arkle-frontend.js') }}"></script>
+    <script src="{{ asset('js/arkle-frontend.js') }}?v={{ file_exists(public_path('js/arkle-frontend.js')) ? filemtime(public_path('js/arkle-frontend.js')) : '2.0' }}"></script>
     @stack('scripts')
 </body>
 </html>
