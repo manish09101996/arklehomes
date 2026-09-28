@@ -5,9 +5,10 @@ ini_set('display_errors', '1');
 echo "<h2>Arkle Homes Diagnostic Check</h2>";
 echo "PHP Version: " . PHP_VERSION . "<br>";
 
-$baseDir = dirname(__DIR__);
+$baseDir = file_exists(__DIR__ . '/artisan') ? __DIR__ : dirname(__DIR__);
 $storage = $baseDir . '/storage';
 $cache = $baseDir . '/bootstrap/cache';
+
 
 echo "Storage exists: " . (is_dir($storage) ? "YES" : "NO") . "<br>";
 echo "Storage writable: " . (is_writable($storage) ? "YES" : "NO (Fix: chmod -R 775 storage)") . "<br>";
