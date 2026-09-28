@@ -68,11 +68,20 @@ try {
     echo "Public storage exists: " . (file_exists($pubStorage) ? "YES" : "NO") . "<br>";
     echo "Is symlink: " . (is_link($pubStorage) ? "YES" : "NO") . "<br>";
     if (!file_exists($pubStorage) && !is_link($pubStorage)) {
+        $created = false;
         try {
-            $artisanResult = \Illuminate\Support\Facades\Artisan::call('storage:link');
-            echo "<p style='color:green;'>Artisan storage:link output: " . \Illuminate\Support\Facades\Artisan::output() . "</p>";
+            $created = @symlink($baseDir . '/storage/app/public', $pubStorage);
+            if ($created) {
+                echo "<p style='color:green; font-weight:bold;'>✓ Native PHP symlink created successfully!</p>";
+            }
         } catch (\Throwable $se) {
-            echo "<p style='color:red;'>Artisan storage:link error: " . htmlspecialchars($se->getMessage()) . "</p>";
+            echo "<p style='color:orange;'>Symlink not permitted: " . htmlspecialchars($se->getMessage()) . "</p>";
+        }
+
+        if (!$created && !file_exists($pubStorage)) {
+            $srcDir = $baseDir . '/storage/app/public';
+            copyRecursive($srcDir, $pubStorage);
+            echo "<p style='color:green; font-weight:bold;'>✓ Storage files copied to public/storage successfully!</p>";
         }
     }
 
@@ -80,4 +89,20 @@ try {
 
     echo "<p style='color:red; font-weight:bold;'>Error Caught: " . htmlspecialchars($e->getMessage()) . "</p>";
     echo "<pre style='background:#f1f5f9; padding:12px; border-radius:6px;'>" . htmlspecialchars($e->getTraceAsString()) . "</pre>";
+}
+
+function copyRecursive($src, $dst) {
+    if (!is_dir($src)) return;
+    @mkdir($dst, 0755, true);
+    $items = scandir($src);
+    foreach ($items as $item) {
+        if ($item === '.' || $item === '..') continue;
+        $s = $src . '/' . $item;
+        $d = $dst . '/' . $item;
+        if (is_dir($s)) {
+            copyRecursive($s, $d);
+        } else {
+            @copy($s, $d);
+        }
+    }
 }
