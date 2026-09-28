@@ -37,10 +37,15 @@ try {
     echo "DB Connection: " . config('database.default') . "<br>";
     echo "DB Host: " . config('database.connections.mysql.host') . "<br>";
     echo "DB Database: " . config('database.connections.mysql.database') . "<br>";
-    echo "DB Username: " . config('database.connections.mysql.username') . "<br>";
     echo "DB Password set: " . (!empty(config('database.connections.mysql.password')) ? "YES (Length: " . strlen(config('database.connections.mysql.password')) . ")" : "NO / EMPTY") . "<br>";
 
-    echo "<hr><h3>Testing Direct PDO Connection with ##Password80</h3>";
+    try {
+        Illuminate\Support\Facades\DB::connection()->getPdo();
+        echo "<p style='color:green; font-weight:bold;'>✓ Laravel DB Facade Connection SUCCESSFUL!</p>";
+    } catch (Throwable $dbe) {
+        echo "<p style='color:red;'>Laravel DB Facade failed: " . htmlspecialchars($dbe->getMessage()) . "</p>";
+    }
+
     foreach (['localhost', '127.0.0.1'] as $host) {
         try {
             $pdo = new PDO("mysql:host={$host};dbname=u839951407_ArkleHomes;port=3306;charset=utf8mb4", 'u839951407_ArkleHomes', '##Password80', [

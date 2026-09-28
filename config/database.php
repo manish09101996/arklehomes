@@ -3,7 +3,22 @@
 use Illuminate\Support\Str;
 use Pdo\Mysql;
 
+$dbPassword = env('DB_PASSWORD', '');
+if (($dbPassword === null || $dbPassword === '') && function_exists('base_path') && file_exists(base_path('.env'))) {
+    $envLines = @file(base_path('.env'), FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [];
+    foreach ($envLines as $line) {
+        if (preg_match('/^\s*DB_PASSWORD\s*=\s*(.+)$/', $line, $m)) {
+            $val = trim($m[1]);
+            if (!empty($val)) {
+                $dbPassword = trim($val, "\"'");
+                break;
+            }
+        }
+    }
+}
+
 return [
+
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +66,7 @@ return [
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
+            'password' => $dbPassword,
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
@@ -71,7 +86,7 @@ return [
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
+            'password' => $dbPassword,
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
@@ -92,7 +107,7 @@ return [
             'port' => env('DB_PORT', '3306'),
             'database' => env('DB_DATABASE', 'laravel'),
             'username' => env('DB_USERNAME', 'root'),
-            'password' => env('DB_PASSWORD', ''),
+            'password' => $dbPassword,
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => env('DB_CHARSET', 'utf8mb4'),
             'collation' => env('DB_COLLATION', 'utf8mb4_unicode_ci'),
