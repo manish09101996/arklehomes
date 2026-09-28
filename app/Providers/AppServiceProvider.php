@@ -26,6 +26,25 @@ class AppServiceProvider extends ServiceProvider
     {
         Schema::defaultStringLength(191);
 
+        // Auto-create storage symlink or copy if missing on deployment environments
+        $pubStorage = public_path('storage');
+        if (!file_exists($pubStorage) && !is_link($pubStorage)) {
+            $linked = false;
+            try {
+                $linked = @symlink(storage_path('app/public'), $pubStorage);
+            } catch (\Throwable $e) {
+                $linked = false;
+            }
+
+            if (!$linked && !file_exists($pubStorage)) {
+                try {
+                    self::copyStorageTree(storage_path('app/public'), $pubStorage);
+                } catch (\Throwable $e) {
+                    // Fallback route in web.php will handle files
+                }
+            }
+        }
+
         View::composer('*', function ($view) {
             try {
                 if (Schema::hasTable('site_settings')) {
@@ -67,5 +86,31 @@ class AppServiceProvider extends ServiceProvider
                 ]);
             }
         });
+    }
+
+    /**
+     * Recursively copy files from source to destination directory
+     */
+    private static function copyStorageTree(string $src, string $dst): void
+    {
+        if (!is_dir($src)) {
+            return;
+        }
+        if (!is_dir($dst)) {
+            @mkdir($dst, 0755, true);
+        }
+        $items = scandir($src);
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+            $srcItem = $src . '/' . $item;
+            $dstItem = $dst . '/' . $item;
+            if (is_dir($srcItem)) {
+                self::copyStorageTree($srcItem, $dstItem);
+            } elseif (!file_exists($dstItem)) {
+                @copy($srcItem, $dstItem);
+            }
+        }
     }
 }

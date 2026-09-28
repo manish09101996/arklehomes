@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Media;
+use App\Helpers\StorageHelper;
 
 class MediaManagerController extends Controller
 {
@@ -36,6 +37,7 @@ class MediaManagerController extends Controller
             foreach ($request->file('files') as $file) {
                 $originalName = $file->getClientOriginalName();
                 $path = $file->store('media', 'public');
+                StorageHelper::sync($path);
 
                 $media = Media::create([
                     'filename' => basename($path),

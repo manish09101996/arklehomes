@@ -50,11 +50,30 @@ Route::get('/terms', [PageController::class, 'terms']);
 Route::get('/sitemap.xml', [SeoController::class, 'sitemap'])->name('sitemap');
 Route::get('/robots.txt', [SeoController::class, 'robots'])->name('robots');
 
+// Storage fallback route for environments where symlink is absent or restricted
+Route::get('/storage/{path}', function ($path) {
+    $filePath = storage_path('app/public/' . $path);
+    if (!file_exists($filePath)) {
+        $imgFallback = public_path('images/' . $path);
+        if (file_exists($imgFallback)) {
+            $filePath = $imgFallback;
+        } else {
+            abort(404);
+        }
+    }
+    $mime = mime_content_type($filePath) ?: 'application/octet-stream';
+    return response()->file($filePath, [
+        'Content-Type' => $mime,
+        'Cache-Control' => 'public, max-age=604800',
+    ]);
+})->where('path', '.*');
+
 /*
 |--------------------------------------------------------------------------
 | Admin Authentication Routes
 |--------------------------------------------------------------------------
 */
+Route::redirect('/login', '/admin/login');
 Route::get('/admin/login', [AuthController::class, 'showLogin'])->name('admin.login');
 Route::post('/admin/login', [AuthController::class, 'login'])->name('admin.login.submit');
 Route::post('/admin/logout', [AuthController::class, 'logout'])->name('admin.logout');

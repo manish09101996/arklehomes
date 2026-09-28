@@ -18,8 +18,15 @@
     RewriteCond %{REQUEST_URI} (.+)/$
     RewriteRule ^ %1 [L,R=301]
 
-    # Directly serve static assets located in public/
+    # Directly serve static assets located in public/ if they exist
+    RewriteCond %{DOCUMENT_ROOT}/public/$1/$2 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/ArkleHomes/public/$1/$2 -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^(css|js|images|storage|fonts|build)/(.*)$ public/$1/$2 [L,NC]
+
+    RewriteCond %{DOCUMENT_ROOT}/public/$1 -f [OR]
+    RewriteCond %{DOCUMENT_ROOT}/ArkleHomes/public/$1 -f [OR]
+    RewriteCond %{REQUEST_FILENAME} -f
     RewriteRule ^(favicon\.ico|robots\.txt)$ public/$1 [L,NC]
 
     # Send all other requests to Front Controller

@@ -11,6 +11,7 @@ use App\Models\ProjectCategory;
 use App\Models\ProjectImage;
 use App\Models\ProjectFeature;
 use App\Models\ProjectSpecification;
+use App\Helpers\StorageHelper;
 
 class ProjectManagerController extends Controller
 {
@@ -114,6 +115,7 @@ class ProjectManagerController extends Controller
 
         if ($request->hasFile('featured_image')) {
             $path = $request->file('featured_image')->store('projects', 'public');
+            StorageHelper::sync($path);
             $project->featured_image = $path;
         }
 
@@ -151,6 +153,7 @@ class ProjectManagerController extends Controller
         if ($request->hasFile('gallery_images')) {
             foreach ($request->file('gallery_images') as $idx => $imgFile) {
                 $path = $imgFile->store('projects', 'public');
+                StorageHelper::sync($path);
                 ProjectImage::create([
                     'project_id' => $project->id,
                     'image_path' => $path,
@@ -234,6 +237,7 @@ class ProjectManagerController extends Controller
 
         if ($request->hasFile('featured_image')) {
             $path = $request->file('featured_image')->store('projects', 'public');
+            StorageHelper::sync($path);
             $project->featured_image = $path;
         }
 
@@ -274,6 +278,7 @@ class ProjectManagerController extends Controller
             $currentMaxOrder = $project->images()->max('order') ?? 0;
             foreach ($request->file('gallery_images') as $idx => $imgFile) {
                 $path = $imgFile->store('projects', 'public');
+                StorageHelper::sync($path);
                 ProjectImage::create([
                     'project_id' => $project->id,
                     'image_path' => $path,

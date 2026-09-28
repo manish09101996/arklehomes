@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Testimonial;
 use Illuminate\Support\Facades\Storage;
+use App\Helpers\StorageHelper;
 
 class TestimonialManagerController extends Controller
 {
@@ -43,6 +44,7 @@ class TestimonialManagerController extends Controller
 
         if ($request->hasFile('avatar')) {
             $testimonial->avatar = $request->file('avatar')->store('testimonials', 'public');
+            StorageHelper::sync($testimonial->avatar);
         }
 
         $testimonial->save();
@@ -91,6 +93,7 @@ class TestimonialManagerController extends Controller
                 Storage::disk('public')->delete($testimonial->avatar);
             }
             $testimonial->avatar = $request->file('avatar')->store('testimonials', 'public');
+            StorageHelper::sync($testimonial->avatar);
         }
 
         $testimonial->save();
