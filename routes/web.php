@@ -97,8 +97,11 @@ Route::prefix('admin')->name('admin.')->middleware('admin')->group(function () {
     // Testimonials
     Route::get('/testimonials', [TestimonialManagerController::class, 'index'])->name('testimonials.index');
     Route::post('/testimonials', [TestimonialManagerController::class, 'store'])->name('testimonials.store');
+    Route::get('/testimonials/{testimonial}/edit', [TestimonialManagerController::class, 'edit'])->name('testimonials.edit');
     Route::put('/testimonials/{testimonial}', [TestimonialManagerController::class, 'update'])->name('testimonials.update');
     Route::delete('/testimonials/{testimonial}', [TestimonialManagerController::class, 'destroy'])->name('testimonials.destroy');
+    Route::post('/testimonials/{testimonial}/toggle-published', [TestimonialManagerController::class, 'togglePublished'])->name('testimonials.toggle-published');
+    Route::post('/testimonials/reorder', [TestimonialManagerController::class, 'reorder'])->name('testimonials.reorder');
 
     // Services / Feature Cards
     Route::get('/services', [ServiceManagerController::class, 'index'])->name('services.index');

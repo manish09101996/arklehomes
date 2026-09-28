@@ -178,19 +178,44 @@
     <!-- =========================================================================
          SECTION 5: TESTIMONIALS
          ========================================================================= -->
-    <section class="section section-cream">
+    <section class="section section-cream testimonials-section">
         <div class="container">
             <div class="section-header text-center">
-                <span class="eyebrow eyebrow-center">TESTIMONIALS</span>
-                <h2 class="section-title">What Our Clients Say</h2>
-                <p class="section-subtitle" style="margin: 0 auto;">We take pride in building lasting relationships and homes our clients love.</p>
+                <span class="eyebrow eyebrow-center">{{ setting('testimonials_eyebrow', 'TESTIMONIALS') }}</span>
+                <h2 class="section-title">{{ setting('testimonials_heading', 'What Our Clients Say') }}</h2>
+                <p class="section-subtitle" style="margin: 0 auto;">{{ setting('testimonials_subtitle', 'We take pride in building lasting relationships and homes our clients love.') }}</p>
             </div>
 
-            <div class="testimonials-grid">
-                @foreach($testimonials as $t)
-                    <x-testimonial-card :testimonial="$t" />
-                @endforeach
-            </div>
+            @if($testimonials->isNotEmpty())
+                <div class="testimonial-carousel-container" id="testimonialCarousel">
+                    <div class="testimonial-carousel-stage">
+                        <button class="carousel-arrow carousel-arrow-prev" aria-label="Previous testimonials" type="button">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="15 18 9 12 15 6"></polyline>
+                            </svg>
+                        </button>
+
+                        <div class="testimonial-carousel-viewport">
+                            <div class="testimonial-carousel-track">
+                                @foreach($testimonials as $t)
+                                    <div class="testimonial-slide">
+                                        <x-testimonial-card :testimonial="$t" />
+                                    </div>
+                                @endforeach
+                            </div>
+                        </div>
+
+                        <button class="carousel-arrow carousel-arrow-next" aria-label="Next testimonials" type="button">
+                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+                                <polyline points="9 18 15 12 9 6"></polyline>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Small Pagination Dots -->
+                    <div class="carousel-dots" id="testimonialDots" role="tablist" aria-label="Testimonial slides"></div>
+                </div>
+            @endif
         </div>
     </section>
 

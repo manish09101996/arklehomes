@@ -30,11 +30,10 @@ class HomeController extends Controller
         // Commitment statistics counters
         $statistics = Statistic::where('is_active', true)->orderBy('order')->get();
 
-        // Testimonials
+        // Testimonials (all published testimonials ordered by order)
         $testimonials = Testimonial::where('is_published', true)
-            ->where('is_featured', true)
             ->orderBy('order')
-            ->take(6)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         // SEO meta

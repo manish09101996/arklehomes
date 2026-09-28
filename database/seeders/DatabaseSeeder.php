@@ -455,6 +455,26 @@ class DatabaseSeeder extends Seeder
                 'is_published' => true,
                 'order' => 4,
             ],
+            [
+                'client_name' => 'David & Sarah T.',
+                'client_role' => 'Bespoke Townhouse Owners',
+                'review' => 'The attention to detail and finishes are second to none. Delivered on time and within budget with extraordinary craftsmanship.',
+                'rating' => 5,
+                'location' => 'Sunbury, VIC',
+                'is_featured' => true,
+                'is_published' => true,
+                'order' => 5,
+            ],
+            [
+                'client_name' => 'H. Patterson',
+                'client_role' => 'Architectural Villa Client',
+                'review' => 'We could not be happier with our new residence. Sean and the team took our complex design ideas and made them a stunning reality.',
+                'rating' => 5,
+                'location' => 'Torquay, VIC',
+                'is_featured' => true,
+                'is_published' => true,
+                'order' => 6,
+            ],
         ];
 
         foreach ($testimonialsData as $t) {

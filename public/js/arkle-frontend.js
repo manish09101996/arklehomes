@@ -285,4 +285,276 @@ document.addEventListener('DOMContentLoaded', function () {
             });
         });
     }
+
+    // 8. Premium Testimonials Infinite Carousel
+    (function initTestimonialCarousel() {
+        const carousel = document.getElementById('testimonialCarousel');
+        if (!carousel) return;
+
+        const viewport = carousel.querySelector('.testimonial-carousel-viewport');
+        const track = carousel.querySelector('.testimonial-carousel-track');
+        const prevBtn = carousel.querySelector('.carousel-arrow-prev');
+        const nextBtn = carousel.querySelector('.carousel-arrow-next');
+        const dotsContainer = document.getElementById('testimonialDots');
+
+        if (!viewport || !track) return;
+
+        const originalSlides = Array.from(track.querySelectorAll('.testimonial-slide'));
+        const originalCount = originalSlides.length;
+        if (originalCount === 0) return;
+
+        let visibleCount = getVisibleCount();
+        let currentIndex = 0;
+        let isTransitioning = false;
+        let autoSlideTimer = null;
+        const autoSlideInterval = 4500;
+
+        function getVisibleCount() {
+            const width = window.innerWidth;
+            if (width > 992) return 3; // Desktop: 3
+            if (width > 600) return 2; // Tablet: 2
+            return 1;                  // Mobile: 1
+        }
+
+        function setupCarousel() {
+            track.innerHTML = '';
+
+            let itemsToUse = [...originalSlides];
+            while (itemsToUse.length < visibleCount + 2) {
+                itemsToUse = itemsToUse.concat(originalSlides.map(s => s.cloneNode(true)));
+            }
+
+            const slideWidthPercent = 100 / visibleCount;
+
+            // Prepend clones from end
+            const headClones = itemsToUse.slice(-visibleCount).map(s => {
+                const clone = s.cloneNode(true);
+                clone.classList.add('is-clone');
+                return clone;
+            });
+
+            // Append clones from start
+            const tailClones = itemsToUse.slice(0, visibleCount).map(s => {
+                const clone = s.cloneNode(true);
+                clone.classList.add('is-clone');
+                return clone;
+            });
+
+            headClones.forEach(s => track.appendChild(s));
+            itemsToUse.forEach(s => track.appendChild(s.cloneNode(true)));
+            tailClones.forEach(s => track.appendChild(s));
+
+            const allSlides = track.querySelectorAll('.testimonial-slide');
+            allSlides.forEach(slide => {
+                slide.style.width = slideWidthPercent + '%';
+            });
+
+            currentIndex = visibleCount;
+            track.style.transition = 'none';
+            track.style.transform = `translateX(-${currentIndex * slideWidthPercent}%)`;
+
+            buildDots(originalCount);
+            updateDots();
+        }
+
+        function buildDots(count) {
+            if (!dotsContainer) return;
+            dotsContainer.innerHTML = '';
+            for (let i = 0; i < count; i++) {
+                const dot = document.createElement('button');
+                dot.className = 'carousel-dot' + (i === 0 ? ' active' : '');
+                dot.setAttribute('type', 'button');
+                dot.setAttribute('aria-label', `Go to testimonial slide ${i + 1}`);
+                dot.addEventListener('click', () => {
+                    if (isTransitioning) return;
+                    goToRealSlide(i);
+                    resetAutoSlide();
+                });
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function updateDots() {
+            if (!dotsContainer) return;
+            const dots = dotsContainer.querySelectorAll('.carousel-dot');
+            if (dots.length === 0) return;
+
+            const realIndex = ((currentIndex - visibleCount) % originalCount + originalCount) % originalCount;
+            dots.forEach((dot, idx) => {
+                if (idx === realIndex) {
+                    dot.classList.add('active');
+                } else {
+                    dot.classList.remove('active');
+                }
+            });
+        }
+
+        function moveTo(index, animate = true) {
+            const slideWidthPercent = 100 / visibleCount;
+            if (animate) {
+                isTransitioning = true;
+                track.style.transition = 'transform 0.5s cubic-bezier(0.25, 1, 0.5, 1)';
+            } else {
+                track.style.transition = 'none';
+            }
+            currentIndex = index;
+            track.style.transform = `translateX(-${currentIndex * slideWidthPercent}%)`;
+            updateDots();
+        }
+
+        function nextSlide() {
+            if (isTransitioning) return;
+            moveTo(currentIndex + 1);
+        }
+
+        function prevSlide() {
+            if (isTransitioning) return;
+            moveTo(currentIndex - 1);
+        }
+
+        function goToRealSlide(targetOriginalIndex) {
+            const currentRealIndex = ((currentIndex - visibleCount) % originalCount + originalCount) % originalCount;
+            const diff = targetOriginalIndex - currentRealIndex;
+            moveTo(currentIndex + diff);
+        }
+
+        track.addEventListener('transitionend', function () {
+            isTransitioning = false;
+            const allSlides = track.querySelectorAll('.testimonial-slide');
+            const totalSlides = allSlides.length;
+            const totalReal = totalSlides - 2 * visibleCount;
+            const slideWidthPercent = 100 / visibleCount;
+
+            if (currentIndex >= totalSlides - visibleCount) {
+                track.style.transition = 'none';
+                currentIndex = currentIndex - totalReal;
+                track.style.transform = `translateX(-${currentIndex * slideWidthPercent}%)`;
+                void track.offsetWidth;
+            } else if (currentIndex < visibleCount) {
+                track.style.transition = 'none';
+                currentIndex = currentIndex + totalReal;
+                track.style.transform = `translateX(-${currentIndex * slideWidthPercent}%)`;
+                void track.offsetWidth;
+            }
+            updateDots();
+        });
+
+        if (nextBtn) {
+            nextBtn.addEventListener('click', function () {
+                nextSlide();
+                resetAutoSlide();
+            });
+        }
+        if (prevBtn) {
+            prevBtn.addEventListener('click', function () {
+                prevSlide();
+                resetAutoSlide();
+            });
+        }
+
+        function startAutoSlide() {
+            stopAutoSlide();
+            autoSlideTimer = setInterval(nextSlide, autoSlideInterval);
+        }
+
+        function stopAutoSlide() {
+            if (autoSlideTimer) {
+                clearInterval(autoSlideTimer);
+                autoSlideTimer = null;
+            }
+        }
+
+        function resetAutoSlide() {
+            stopAutoSlide();
+            startAutoSlide();
+        }
+
+        carousel.addEventListener('mouseenter', stopAutoSlide);
+        carousel.addEventListener('mouseleave', startAutoSlide);
+
+        // Touch & Swipe gestures
+        let startX = 0;
+        let startY = 0;
+        let currentX = 0;
+        let isDragging = false;
+        let isHorizontalSwipe = null;
+
+        viewport.addEventListener('touchstart', function (e) {
+            if (isTransitioning) return;
+            const touch = e.touches[0];
+            startX = touch.clientX;
+            startY = touch.clientY;
+            currentX = startX;
+            isDragging = true;
+            isHorizontalSwipe = null;
+            stopAutoSlide();
+        }, { passive: true });
+
+        viewport.addEventListener('touchmove', function (e) {
+            if (!isDragging) return;
+            const touch = e.touches[0];
+            currentX = touch.clientX;
+            const deltaX = currentX - startX;
+            const deltaY = touch.clientY - startY;
+
+            if (isHorizontalSwipe === null) {
+                if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 6) {
+                    isHorizontalSwipe = true;
+                } else if (Math.abs(deltaY) > 6) {
+                    isHorizontalSwipe = false;
+                }
+            }
+
+            if (isHorizontalSwipe) {
+                if (e.cancelable) e.preventDefault();
+                const slideWidthPercent = 100 / visibleCount;
+                const basePercent = -(currentIndex * slideWidthPercent);
+                const deltaPercent = (deltaX / viewport.offsetWidth) * 100;
+                track.style.transition = 'none';
+                track.style.transform = `translateX(${basePercent + deltaPercent}%)`;
+            }
+        }, { passive: false });
+
+        function handleTouchEnd() {
+            if (!isDragging) return;
+            isDragging = false;
+            const deltaX = currentX - startX;
+
+            if (isHorizontalSwipe) {
+                const threshold = 40;
+                if (deltaX < -threshold) {
+                    nextSlide();
+                } else if (deltaX > threshold) {
+                    prevSlide();
+                } else {
+                    moveTo(currentIndex, true);
+                }
+            }
+            isHorizontalSwipe = null;
+            resetAutoSlide();
+        }
+
+        viewport.addEventListener('touchend', handleTouchEnd);
+        viewport.addEventListener('touchcancel', handleTouchEnd);
+
+        let resizeTimeout;
+        window.addEventListener('resize', function () {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(function () {
+                const newVisible = getVisibleCount();
+                if (newVisible !== visibleCount) {
+                    visibleCount = newVisible;
+                    setupCarousel();
+                } else {
+                    const slideWidthPercent = 100 / visibleCount;
+                    track.style.transition = 'none';
+                    track.style.transform = `translateX(-${currentIndex * slideWidthPercent}%)`;
+                }
+            }, 150);
+        });
+
+        setupCarousel();
+        startAutoSlide();
+    })();
 });
+
