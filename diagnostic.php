@@ -2,12 +2,14 @@
 error_reporting(E_ALL);
 ini_set('display_errors', '1');
 
-echo "<h2>Arkle Homes Diagnostic Check</h2>";
-echo "PHP Version: " . PHP_VERSION . "<br>";
+echo "Current Dir (__DIR__): " . __DIR__ . "<br>";
+echo "Files in current dir: " . implode(', ', array_slice(scandir(__DIR__), 0, 15)) . "<br>";
 
-$baseDir = file_exists(__DIR__ . '/artisan') ? __DIR__ : dirname(__DIR__);
+$baseDir = file_exists(__DIR__ . '/artisan') ? __DIR__ : (file_exists(dirname(__DIR__) . '/artisan') ? dirname(__DIR__) : __DIR__);
+echo "Detected BaseDir: " . $baseDir . "<br>";
 $storage = $baseDir . '/storage';
 $cache = $baseDir . '/bootstrap/cache';
+
 
 
 echo "Storage exists: " . (is_dir($storage) ? "YES" : "NO") . "<br>";
