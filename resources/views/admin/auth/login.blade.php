@@ -45,15 +45,6 @@
             text-align: center;
             margin-bottom: 28px;
         }
-        .login-quick-fill {
-            background: #F8FAFC;
-            border: 1px dashed #CBD5E1;
-            padding: 12px;
-            border-radius: 6px;
-            font-size: 0.8rem;
-            color: #475569;
-            margin-bottom: 20px;
-        }
     </style>
 </head>
 <body class="login-screen">
@@ -83,23 +74,17 @@
             </div>
         @endif
 
-        <div class="login-quick-fill">
-            <strong>Default Super Admin Credentials:</strong><br>
-            Email: <code>admin@arklehomes.com.au</code><br>
-            Password: <code>password123</code>
-        </div>
-
         <form action="{{ route('admin.login.submit') }}" method="POST">
             @csrf
 
             <div class="admin-form-group">
                 <label for="email" class="admin-form-label">Email Address</label>
-                <input type="email" id="email" name="email" class="admin-form-control" value="{{ old('email', 'admin@arklehomes.com.au') }}" required autofocus>
+                <input type="email" id="email" name="email" class="admin-form-control" value="{{ old('email') }}" placeholder="name@arklehomes.com.au" required autofocus autocomplete="email">
             </div>
 
             <div class="admin-form-group">
                 <label for="password" class="admin-form-label">Password</label>
-                <input type="password" id="password" name="password" class="admin-form-control" value="password123" required>
+                <input type="password" id="password" name="password" class="admin-form-control" placeholder="••••••••••••" required autocomplete="current-password">
             </div>
 
             <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px;">
